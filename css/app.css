@@ -1,3 +1,8 @@
+html {
+    font-family: 'Roboto Condensed', sans-serif;
+
+}
+
 #header {
     background-color: rgb(164,0,62);
 
@@ -10,6 +15,8 @@
     border-bottom: 3px solid rgb(110, 0, 55);
 
     z-index: 999;
+
+
 }
 
 #main {
@@ -20,7 +27,7 @@
 }
 
 .fullHeight {
-    height: 100vh;
+    height: calc(100% + 2rem) !important;
 
 
 }
@@ -57,10 +64,132 @@
 
 
 .videoGridX {
-    height: 100%;
 }
 
 .videoGridY {
+    height: calc(100% + 30px);
+
+}
 
 
+.callerContainer {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 100%;
+    background: red;
+
+}
+
+.test {
+    /*background: dodgerblue;*/
+    //background: lightblue;
+
+    height: 50%;
+    color: #cc4b37;
+
+
+}
+
+
+#addVideo {
+    position: relative;
+    float: left;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    border: 4px dashed #cc4b37;
+
+    height: 15rem;
+    width: 15rem;
+
+}
+
+
+#addVideo:hover {
+    background-color: rgba(0,0,0,0.15);
+
+}
+
+#addVideo h1 {
+
+    position: relative;
+    float: left;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    font-size: 500%;
+}
+
+
+.test video {
+    height: 60%;
+
+    position: relative;
+    float: left;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    -webkit-box-shadow: 2px 2px 21px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 2px 2px 21px 0px rgba(0,0,0,0.75);
+    box-shadow: 2px 2px 21px 0px rgba(0,0,0,0.75);
+
+}
+
+
+
+
+
+
+/* SANNAN ALUE! */
+
+
+
+#chatbox {
+    overflow: auto;
+}
+
+#chatType {
+    background-color: #FCFBF7;
+
+    border: 1px solid rgba(2, 2, 10, 0.2); /* #02020A 20% */
+
+    -webkit-box-shadow: 10px 10px 45px -15px rgba(84,84,84,1);
+    -moz-box-shadow: 10px 10px 45px -15px rgba(84,84,84,1);
+    box-shadow: 10px 10px 45px -15px rgba(84,84,84,1);
+}
+
+#chatSend {
+    background-color: #8C003C;
+    color: #FCFBF7;
+    border-radius: 50%;
+    height: 2rem;
+    width: 2rem;
+}
+
+#chatText {
+    background-color: #FCFBF7;
+    border: none;
+    height: 100%;
+    box-shadow: none;
+}
+
+ul {
+    margin: 0;
+
+}
+
+li {
+    list-style: none;
+}
+
+li p {
+    overflow: auto;
+    word-break: break-all;
 }

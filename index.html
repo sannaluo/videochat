@@ -7,60 +7,57 @@
     <title>Best Chatroom</title>
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
+    <link href="https://fonts.googleapis.com/css?family=Charmonman|Roboto+Condensed" rel="stylesheet">
+
 </head>
 <body>
 
-<div id="container" class="grid-container full">
+<div id="container" class="grid-container fluid">
 
     <div class="grid-y grid-frame grid-padding-x grid-padding-y">
 
         <div id="header" class="cell">
-            <h1>😋 Best chatroom</h1>
+            <h1>🐶 Dogroom</h1>
         </div>
 
         <div id="main" class="cell auto">
+
             <div class="grid-x grid-padding-x grid-padding-y fullHeight">
 
                 <div id="videoContainer" class="cell small-9">
 
-                    <div class="grid-y grid-frame grid-padding-x grid-padding-y full videoGridY">
 
-                        <div class="cell small-6 align-self-stretch">
-                            <div class="grid-x grid-padding-x grid-padding-y videoGridX">
-                                <div class="cell auto">
-                                    <div class="videobox">
-                                       <h1>testi 1</h1>
-                                    </div>
-                                </div>
-                                <div class="cell auto">
-                                    <div class="videobox">
-                                        <h1>testi 2</h1>
-                                    </div>
-                                </div>
-                            </div>
+                    <div id="callers" class="grid-x grid-padding-x grid-padding-y small-up-1 align-center-middle fullHeight">
+
+
+                        <div id="addVideoContainer" class="cell test align-self-stretch"><div id="addVideo"><h1>+</h1></div></div>
+
+                    </div>
+
+
+                </div>
+
+
+                <div id="chatroomContainer" class="cell align-self-stretch small-3">
+                    <div class="grid-y grid-frame grid-padding-x grid-padding-y grid-margin-x grid-margin-y fullHeight">
+                        <div id="chatbox" class="cell align-self-stretch small-10">
+                            <ul id="chatMessages">
+                            </ul>
                         </div>
-
-                        <div class="cell small-6 align-self-stretch">
-                            <div class="grid-x grid-padding-x grid-padding-y videoGridX">
-                                <div class="cell auto">
-                                    <div class="videobox">
-                                        <h1>testi 3</h1>
-                                    </div>
+                        <div id="chatType" class="cell align-self-stretch small-2">
+                            <div class="grid-x">
+                                <div class="cell small-10">
+                                    <!--  <input type="search" name="chatText" id="chatText"> -->
+                                    <form id="chatForm">
+                                        <input type="text" name="focus" id="chatText" placeholder="type here" autocomplete="off" />
+                                    </form>
                                 </div>
-                                <div class="cell auto">
-                                    <div class="videobox">
-                                        <h1>testi 4</h1>
-                                    </div>
+                                <div class="cell small-2">
+                                    <button id="chatSend">-></button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-
-
-                <div id="chatroomContainer" class="cell align-self-stretch small-3">
-                    <h1>chätti</h1>
 
                 </div>
 
