@@ -60,7 +60,25 @@
 
 
                 <div id="chatroomContainer" class="cell align-self-stretch small-3">
-                    <h1>chätti</h1>
+                    <div class="grid-y grid-frame grid-padding-x grid-padding-y">
+                        <div id="chatbox" class="cell align-self-stretch small-10">
+                            <ul id="chatMessages">
+                            </ul>
+                        </div>
+                        <div id="chatType" class="cell align-self-stretch small-2 small-margin-collapse">
+                            <div class="grid-x">
+                                <div class="cell small-10">
+                                 <!--  <input type="search" name="chatText" id="chatText"> -->
+                                    <form id="chatForm">
+                                        <input type="text" name="focus" id="chatText" placeholder="type here" autocomplete="off" />
+                                    </form>
+                                </div>
+                                <div class="cell small-2">
+                                    <button id="chatSend">-></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
 

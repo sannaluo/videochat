@@ -1,5 +1,27 @@
+/*
+valkonen
+#FCFBF7
+rgb(252,251,247)
+
+purppura
+#8C003C
+rgb(140,0,60)
+
+musta
+#02020A
+rgb(2,2,10)
+
+sininen
+#00B0F0
+rgb(0,176,240)
+
+vaalea harmaa
+#F2F2F2
+rgb(242,242,242)
+*/
+
 #header {
-    background-color: rgb(164,0,62);
+    background-color: rgb(140,0,60);
 
     color: #FCFBF7;
 
@@ -20,7 +42,7 @@
 }
 
 .fullHeight {
-    height: 100vh;
+    height: calc(100vh - 2rem);
 
 
 }
@@ -63,4 +85,47 @@
 .videoGridY {
 
 
+}
+
+#chatbox {
+    overflow: auto;
+}
+
+#chatType {
+    background-color: #FCFBF7;
+    margin: 1rem;
+    border: 1px solid rgba(2, 2, 10, 0.2); /* #02020A 20% */
+
+    -webkit-box-shadow: 10px 10px 45px -15px rgba(84,84,84,1);
+    -moz-box-shadow: 10px 10px 45px -15px rgba(84,84,84,1);
+    box-shadow: 10px 10px 45px -15px rgba(84,84,84,1);
+}
+
+#chatSend {
+    background-color: #8C003C;
+    color: #FCFBF7;
+    border-radius: 50%;
+    height: 2rem;
+    width: 2rem;
+}
+
+#chatText {
+    background-color: #FCFBF7;
+    border: none;
+    height: 100%;
+    box-shadow: none;
+}
+
+ul {
+    margin: 0;
+
+}
+
+li {
+    list-style: none;
+}
+
+li p {
+    overflow: auto;
+    word-break: break-all;
 }
