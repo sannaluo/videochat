@@ -1,0 +1,66 @@
+#header {
+    background-color: rgb(164,0,62);
+
+    color: #FCFBF7;
+
+    -webkit-box-shadow: 0px 2px 31px -1px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 2px 31px -1px rgba(0,0,0,0.75);
+    box-shadow: 0px 2px 31px -1px rgba(0,0,0,0.75);
+
+    border-bottom: 3px solid rgb(110, 0, 55);
+
+    z-index: 999;
+}
+
+#main {
+    background-color: #FCFBF7;
+
+
+
+}
+
+.fullHeight {
+    height: 100vh;
+
+
+}
+
+#chatroomContainer {
+    background-color: #f2f2f2;
+
+
+    -webkit-box-shadow: inset 8px 0px 42px -21px rgba(0,0,0,0.75);
+    -moz-box-shadow: inset 8px 0px 42px -21px rgba(0,0,0,0.75);
+    box-shadow: inset 8px 0px 42px -21px rgba(0,0,0,0.75);
+}
+
+
+.videobox {
+    background-color: #000000;
+    color: white;
+
+    text-align: center;
+
+    margin: 2rem;
+
+    width: calc(100% - 4rem);
+    height: calc(100% - 4rem);
+
+
+    border-bottom: 3px solid rgb(49, 49, 49);
+    border-right: 3px solid rgb(49, 49, 49);
+
+    -webkit-box-shadow: 2px 2px 21px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 2px 2px 21px 0px rgba(0,0,0,0.75);
+    box-shadow: 2px 2px 21px 0px rgba(0,0,0,0.75);
+}
+
+
+.videoGridX {
+    height: 100%;
+}
+
+.videoGridY {
+
+
+}
