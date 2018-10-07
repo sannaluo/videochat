@@ -1,10 +1,9 @@
 $(document).foundation()
-
+// const remoteVideo = document.getElementById('remoteVideo');
 
 const callersContainer = document.querySelector('#callers');
 const addCallerBtn = document.querySelector('#addVideo');
 
-let gridSettings = 1;
 
 
 const arrangeGrid = () => {
@@ -12,7 +11,7 @@ const arrangeGrid = () => {
     console.log(document.querySelectorAll('#callers .cell'));
 
 
-    if (gridSettings < 3) {
+    if (document.querySelectorAll('#callers .cell').length < 3) {
         callersContainer.className = 'grid-x grid-padding-x grid-padding-y small-up-1 align-center-middle fullHeight';
 
         for (let i of document.querySelectorAll('#callers .cell')) {
@@ -20,7 +19,7 @@ const arrangeGrid = () => {
         }
 
 
-    } else if (gridSettings < 5) {
+    } else if (document.querySelectorAll('#callers .cell').length < 5) {
         callersContainer.className = 'grid-x grid-padding-x grid-padding-y small-up-2 align-center-middle fullHeight';
 
         for (let i of document.querySelectorAll('#callers .cell')) {
@@ -28,7 +27,7 @@ const arrangeGrid = () => {
         }
 
 
-    } else if (gridSettings < 9) {
+    } else if (document.querySelectorAll('#callers .cell').length < 9) {
         callersContainer.className = 'grid-x grid-padding-x grid-padding-y small-up-4 align-center-middle fullHeight';
 
         for (let i of document.querySelectorAll('#callers .cell')) {
@@ -36,7 +35,7 @@ const arrangeGrid = () => {
         }
 
 
-    } else if (gridSettings < 13) {
+    } else if (document.querySelectorAll('#callers .cell').length < 13) {
         callersContainer.className = 'grid-x grid-padding-x grid-padding-y small-up-4 align-center-middle fullHeight';
 
 
@@ -54,24 +53,7 @@ const arrangeGrid = () => {
 
 };
 
-$(addCallerBtn).click(function () {
-    console.log('asd');
-
-
-    gridSettings += 1;
-
-    console.log(gridSettings);
-
-
-    const addedVideo = '<div class="cell test align-self-stretch"><video loop autoplay src="media/vid/3CyobnaL6Y3zkh9W9QCuCBU84xmPGGVwN9D9Xzq2smg.mp4"></video></div>';
-
-    $('#addVideoContainer').before(addedVideo);
-
-
-    arrangeGrid(gridSettings);
-
-
-});
+arrangeGrid();
 
 
 
