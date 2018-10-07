@@ -1,84 +1,93 @@
-$(document).foundation();
+'use strict';
 
+const socket = io.connect('https://10.114.34.13:3000');
 
-const callersContainer = document.querySelector('#callers');
-const addCallerBtn = document.querySelector('#addVideo');
+const constraints = {audio: true, video: true};
 
-let gridSettings = 1;
-
-
-const arrangeGrid = () => {
-
-    console.log(document.querySelectorAll('#callers .cell'));
-
-
-    if (gridSettings < 3) {
-        callersContainer.className = 'grid-x grid-padding-x grid-padding-y small-up-1 align-center-middle fullHeight';
-
-        for (let i of document.querySelectorAll('#callers .cell')) {
-            i.style.height = '50%';
-        }
-
-
-    } else if (gridSettings < 5) {
-        callersContainer.className = 'grid-x grid-padding-x grid-padding-y small-up-2 align-center-middle fullHeight';
-
-        for (let i of document.querySelectorAll('#callers .cell')) {
-            i.style.height = '50%';
-        }
-
-
-    } else if (gridSettings < 9) {
-        callersContainer.className = 'grid-x grid-padding-x grid-padding-y small-up-4 align-center-middle fullHeight';
-
-        for (let i of document.querySelectorAll('#callers .cell')) {
-            i.style.height = '50%';
-        }
-
-
-    } else if (gridSettings < 13) {
-        callersContainer.className = 'grid-x grid-padding-x grid-padding-y small-up-4 align-center-middle fullHeight';
-
-
-        for (let i of document.querySelectorAll('#callers .cell')) {
-            i.style.height = '33.3%';
-        }
-    } else {
-        $('#addVideoContainer').remove();
-
-        for (let i of document.querySelectorAll('#callers .cell')) {
-            i.style.height = '33.3%';
-        }
-
-    }
-
+const servers = {
+    'iceServers': [
+        {'urls': 'stun:stun.services.mozilla.com'},
+        {'urls': 'stun:stun.l.google.com:19302'},
+        {
+            'urls': 'turn:numb.viagenie.ca',
+            'credential': 'password',
+            'username': 'email',
+        }],
 };
 
-$(addCallerBtn).click(function () {
-    console.log('asd');
+const caller = new RTCPeerConnection();
 
+navigator.mediaDevices.getUserMedia(constraints).then(mediaStream => {
+   // const video = document.querySelector('video');
+    //video.srcObject = mediaStream;
 
-    gridSettings += 1;
+    console.log(mediaStream);
+    console.log(caller);
 
-    console.log(gridSettings);
-
-
-    const addedVideo = '<div class="cell test align-self-stretch"><video loop autoplay src="media/vid/3CyobnaL6Y3zkh9W9QCuCBU84xmPGGVwN9D9Xzq2smg.mp4"></video></div>';
-
-    $('#addVideoContainer').before(addedVideo);
-
-
-    arrangeGrid(gridSettings);
-
-
+   // caller.addStream(mediaStream);
+}).catch(err => {
+    console.log(err.name + ': ' + err.message);
 });
 
+caller.onaddstream = (evt) => {
+    console.log('onaddstream called');
+   // document.querySelector('#remoteVideo').srcObject = evt.stream;
+  //  console.log(document.querySelector('#remoteVideo').srcObject);
+    console.log(evt);
+};
+
+
+//const callBtn = document.getElementById('callBtn');
+
+/*
+callBtn.addEventListener('click', () => {
+    // console.log('click');
+
+    caller.createOffer().then((val) => {
+        caller.setLocalDescription(new RTCSessionDescription(val));
+
+        const jsonval = JSON.stringify(val);
+        //console.log(jsonval);
+       // socket.emit('call', jsonval); //hello: jsonval});
+
+
+    }).catch((e)=>{
+        console.log('error ', e);
+    });
+});
+*/
+/*
+socket.on('call', (value)  => {
+    const v = new RTCSessionDescription(JSON.parse(value));
+    //console.log(v);
+    caller.setRemoteDescription(v);
+    socket.emit('answer',{ answer: 'call answered' });
+    //console.log(value);
+});
+
+socket.on('answer', (value)  => {
+    console.log(value);
+});
+*/
 
 
 
+caller.onicecandidate = evt => {
+    if (!evt.candidate) return;
+    console.log('onicecandidate called');
+    onIceCandidate(evt);
+};
 
+//Send the ICE Candidate to the remote peer
+const onIceCandidate = (evt) => {
+    socket.emit('candidate', JSON.stringify({'candidate': evt.candidate}));
+};
 
-/* Sannan alue! */
+socket.on('candidate', (value) => {
+    console.log(value);
+    caller.addIceCandidate(new RTCIceCandidate(JSON.parse(value).candidate));
+});
+
 
 const chatSend = document.getElementById('chatSend');
 const chatMessages = document.getElementById('chatMessages');
@@ -87,6 +96,7 @@ const chatForm = document.getElementById('chatForm');
 const chatbox = document.getElementById("chatbox");
 
 let sent = false;
+
 
 /**
  * colours used in chat member names
@@ -152,26 +162,6 @@ const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-/**
- * Test for colours and names
- */
-/*
-window.onload = () => {
-    for (let i = 0; i < 20; i++) {
-        const li = document.createElement('li');
-        const p = document.createElement('p');
-        const name = capitalizeFirstLetter(getName(50, nameArray, usedArray2));
-        const typer = name + ': ';
-        const text2 = document.createTextNode(typer);
-        const span = document.createElement('span');
-        span.style.color = getName(16, colourArray, usedArray);
-        span.appendChild(text2);
-        p.appendChild(span);
-        li.appendChild(p);
-        chatMessages.appendChild(li);
-    }
-};
-*/
 
 const user = capitalizeFirstLetter(getName(50, nameArray, usedArray2));
 const color = getName(16, colourArray, usedArray);
@@ -199,20 +189,8 @@ const addChat = (typed) => {
     chatText.value = '';
 };
 
-chatSend.addEventListener('click', () => {
-    if(chatText.value !== '') {
-        sent = true;
-        addChat(chatText.value);
-    }
-});
 
-chatForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    if(chatText.value !== '') {
-        sent = true;
-        addChat(chatText.value);
-    }
-});
+
 
 /**
  * Scroll chat to bottom if user sends chat or user is at the bottom of chat
@@ -220,10 +198,43 @@ chatForm.addEventListener('submit', (e) => {
 setInterval(function() {
     // allow 1px inaccuracy by adding 1
     const isScrolledToBottom = chatbox.scrollHeight - chatbox.clientHeight <= chatbox.scrollTop + 1;
-    //  console.log(isScrolledToBottom);
+
     // scroll to bottom if isScrolledToBottom is true
     if (isScrolledToBottom || sent) {
         chatbox.scrollTop = chatbox.scrollHeight - chatbox.clientHeight;
         sent = false;
     }
 }, 500);
+
+
+
+chatSend.addEventListener('click', () => {
+    if(chatText.value !== '') {
+        sent = true;
+        //addChat(chatText.value);
+        socket.emit('chatSend', chatText.value); //JSON parse?
+    }
+});
+
+chatForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if(chatText.value !== '') {
+        sent = true;
+        //addChat(chatText.value);
+        socket.emit('chatSend', chatText.value); //JSON parse?
+    }
+});
+
+
+socket.on('chatReceive',(chat) => {
+    addChat(chat); // JSON parse ??
+});
+
+const users = document.getElementById('userCounter');
+let usersCount = 1;
+
+socket.on('userAdd', () => {
+    usersCount += 1;
+
+    users.innerHTML = 'People: ' + usersCount.toString();
+});

@@ -7,68 +7,48 @@
     <title>Best Chatroom</title>
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
+    <link href="https://fonts.googleapis.com/css?family=Charmonman|Roboto+Condensed" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
 </head>
 <body>
-
-<div id="container" class="grid-container full">
-
+<div id="container" class="grid-container fluid">
     <div class="grid-y grid-frame grid-padding-x grid-padding-y">
-
         <div id="header" class="cell">
-            <h1>😋 Best chatroom</h1>
+            <div class="grid-x grid-padding-y grid-padding-x">
+                <div class="cell small-10">
+                    <h1>🐶 Dogroom</h1>
+                </div>
+                <div class="cell small-2 align-self-bottom">
+                    <h4 id="userCounter">People: 1</h4>
+                </div>
+            </div>
         </div>
-
         <div id="main" class="cell auto">
             <div class="grid-x grid-padding-x grid-padding-y fullHeight">
-
                 <div id="videoContainer" class="cell small-9">
-
-                    <div class="grid-y grid-frame grid-padding-x grid-padding-y full videoGridY">
-
-                        <div class="cell small-6 align-self-stretch">
-                            <div class="grid-x grid-padding-x grid-padding-y videoGridX">
-                                <div class="cell auto">
-                                    <div class="videobox">
-                                       <h1>testi 1</h1>
-                                    </div>
-                                </div>
-                                <div class="cell auto">
-                                    <div class="videobox">
-                                        <h1>testi 2</h1>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="grid-y fullHeight">
+                        <div class="cell align-self-bottom">
+                            <button id="hangupBtn">x</button>
                         </div>
-
-                        <div class="cell small-6 align-self-stretch">
-                            <div class="grid-x grid-padding-x grid-padding-y videoGridX">
-                                <div class="cell auto">
-                                    <div class="videobox">
-                                        <h1>testi 3</h1>
-                                    </div>
-                                </div>
-                                <div class="cell auto">
-                                    <div class="videobox">
-                                        <h1>testi 4</h1>
-                                    </div>
+                        <div class="cell align-self-stretch small-11">
+                            <div id="callers" class="grid-x grid-padding-x grid-padding-y small-up-1 align-center-middle fullHeight">
+                                <div id="addVideoContainer" class="cell test align-self-stretch">
+                                    <div id="addVideo"><h1>+</h1></div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
-
-
-
                 <div id="chatroomContainer" class="cell align-self-stretch small-3">
-                    <div class="grid-y grid-frame grid-padding-x grid-padding-y">
+                    <div class="grid-y grid-frame grid-padding-x grid-padding-y grid-margin-x grid-margin-y fullHeight">
                         <div id="chatbox" class="cell align-self-stretch small-10">
                             <ul id="chatMessages">
                             </ul>
                         </div>
-                        <div id="chatType" class="cell align-self-stretch small-2 small-margin-collapse">
+                        <div id="chatType" class="cell align-self-stretch small-2">
                             <div class="grid-x">
                                 <div class="cell small-10">
-                                 <!--  <input type="search" name="chatText" id="chatText"> -->
                                     <form id="chatForm">
                                         <input type="text" name="focus" id="chatText" placeholder="type here" autocomplete="off" />
                                     </form>
@@ -79,16 +59,18 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
-
             </div>
         </div>
     </div>
-
+</div>
+    <script src="js/server.js"></script>
     <script src="js/vendor/jquery.js"></script>
     <script src="js/vendor/what-input.js"></script>
     <script src="js/vendor/foundation.js"></script>
     <script src="js/app.js"></script>
+    <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
+    <script src="js/client.js"></script>
+
 </body>
 </html>
