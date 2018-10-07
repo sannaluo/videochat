@@ -182,7 +182,7 @@ const addChat = (typed) => {
 };
 
 chatSend.addEventListener('click', () => {
-    if(chatText.value != '') {
+    if(chatText.value !== '') {
     sent = true;
     addChat(chatText.value);
 }
@@ -190,7 +190,7 @@ chatSend.addEventListener('click', () => {
 
 chatForm.addEventListener('submit', (e) => {
     e.preventDefault();
-if(chatText.value != '') {
+if(chatText.value !== '') {
     sent = true;
     addChat(chatText.value);
 }

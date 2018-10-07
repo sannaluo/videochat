@@ -149,7 +149,6 @@ html {
 /* SANNAN ALUE! */
 
 
-
 #chatbox {
     overflow: auto;
 }
@@ -191,4 +190,15 @@ li {
 li p {
     overflow: auto;
     word-break: break-all;
+}
+
+#userCounter {
+    text-align: right;
+}
+
+#hangupBtn {
+    background-color:#00B0F0;
+    color: #FCFBF7;
+    width: 2rem;
+    height: 2rem;
 }
