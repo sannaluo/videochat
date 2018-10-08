@@ -93,14 +93,26 @@ socket.on('message', function(message) {
 var localVideo = document.querySelector('#localVideo');
 var remoteVideo = document.querySelector('#remoteVideo');
 
-navigator.mediaDevices.getUserMedia({
-    audio: true,
-    video: true
-})
-    .then(gotStream)
-    .catch(function(e) {
-        alert('getUserMedia() error: ' + e.name);
-    });
+$('#addVideo').click( function () {
+
+    const addedVideo = '<div class="cell test align-self-stretch"><video id="localVideo" class="me" autoplay playsinline></video></div>';
+
+    $('#addVideoContainer').before(addedVideo).remove();
+
+    localVideo = document.querySelector('#localVideo');
+
+    navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: true
+    })
+        .then(gotStream)
+        .catch(function(e) {
+            alert('getUserMedia() error: ' + e.name);
+        });
+
+    arrangeGrid();
+
+});
 
 function gotStream(stream) {
     console.log('Adding local stream.');
