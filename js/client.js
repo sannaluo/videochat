@@ -304,13 +304,15 @@ const addChat = (typed, user, color) => {
  */
 setInterval(function() {
     // allow 1px inaccuracy by adding 1
-    const isScrolledToBottom = chatbox.scrollHeight - chatbox.clientHeight <= chatbox.scrollTop + 1;
+    const isScrolledToBottom = chatbox.scrollHeight - chatbox.clientHeight <= chatbox.scrollTop + 60;
 
     // scroll to bottom if isScrolledToBottom is true
     if (isScrolledToBottom || sent) {
         chatbox.scrollTop = chatbox.scrollHeight - chatbox.clientHeight;
         sent = false;
     }
+ //   console.log(sent);
+  //  console.log(isScrolledToBottom);
 }, 500);
 
 

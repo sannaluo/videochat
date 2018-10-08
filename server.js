@@ -104,6 +104,11 @@ io.sockets.on('connection', function(socket) {
         log('Room ' + room + ' now has ' + numClients + ' client(s)');
 
         if (numClients === 0) {
+            // reset counters
+            usersCount = 1;
+            usedArray = [];
+            usedArray2 = [];
+
             socket.join(room);
             log('Client ID ' + socket.id + ' created room ' + room);
             socket.emit('created', room, socket.id);
@@ -113,7 +118,7 @@ io.sockets.on('connection', function(socket) {
             io.sockets.in(room).emit('join', room);
             socket.join(room);
             socket.emit('joined', room, socket.id);
-            usersCount += 1;
+            usersCount = numClients+1; // += 1
             console.log(usersCount);
             io.emit('userAdd', usersCount);
             io.sockets.in(room).emit('ready');
@@ -154,5 +159,11 @@ io.sockets.on('connection', function(socket) {
         const info = {chat: chat, user: user, color: color};
         console.log('chat received in client ', info);
         io.emit('chatReceive', info); // ei broadcast
+    });
+
+    socket.on('disconnect', () => {
+        usersCount -= 1; // += 1
+        console.log(usersCount);
+        io.emit('userAdd', usersCount);
     });
 });
