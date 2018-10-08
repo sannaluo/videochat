@@ -85,6 +85,7 @@ socket.on('message', function(message) {
         pc.addIceCandidate(candidate);
     } else if (message === 'bye' && isStarted) {
         handleRemoteHangup();
+        $('#remoteVideo').remove();
     }
 });
 
@@ -93,14 +94,29 @@ socket.on('message', function(message) {
 var localVideo = document.querySelector('#localVideo');
 var remoteVideo = document.querySelector('#remoteVideo');
 
-navigator.mediaDevices.getUserMedia({
-    audio: true,
-    video: true
-})
-    .then(gotStream)
-    .catch(function(e) {
-        alert('getUserMedia() error: ' + e.name);
-    });
+$('#addVideo').click( function () {
+
+    const addedVideo = '<div class="cell test align-self-stretch"><video id="localVideo" class="me" autoplay playsinline></video></div>';
+
+    $('#addVideoContainer').before(addedVideo).remove();
+
+    localVideo = document.querySelector('#localVideo');
+
+    navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: true
+    })
+        .then(gotStream)
+        .catch(function(e) {
+            alert('getUserMedia() error: ' + e.name);
+        });
+
+    arrangeGrid();
+
+});
+
+
+
 
 function gotStream(stream) {
     console.log('Adding local stream.');
@@ -119,19 +135,19 @@ var constraints = {
 console.log('Getting user media with constraints', constraints);
 
 if (location.hostname !== 'localhost') {
-    requestTurn(
-        'https://computeengineondemand.appspot.com/turn?username=41784574&key=4080218913'
-    );
+    // requestTurn(
+   //     'https://computeengineondemand.appspot.com/turn?username=41784574&key=4080218913'
+   // );
 }
 
 function maybeStart() {
-    console.log('>>>>>>> maybeStart() ', isStarted, localStream, isChannelReady);
+    // console.log('>>>>>>> maybeStart() ', isStarted, localStream, isChannelReady);
     if (!isStarted && typeof localStream !== 'undefined' && isChannelReady) {
-        console.log('>>>>>> creating peer connection');
+       //  console.log('>>>>>> creating peer connection');
         createPeerConnection();
         pc.addStream(localStream);
         isStarted = true;
-        console.log('isInitiator', isInitiator);
+        // console.log('isInitiator', isInitiator);
         if (isInitiator) {
             doCall();
         }
