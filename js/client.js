@@ -1,176 +1,286 @@
 'use strict';
 
-const socket = io.connect('https://10.114.34.13:3000');
+var isChannelReady = false;
+var isInitiator = false;
+var isStarted = false;
+var localStream;
+var pc;
+var remoteStream;
+var turnReady;
 
-const constraints = {audio: true, video: true};
-
-const servers = {
-    'iceServers': [
-        {'urls': 'stun:stun.services.mozilla.com'},
-        {'urls': 'stun:stun.l.google.com:19302'},
-        {
-            'urls': 'turn:numb.viagenie.ca',
-            'credential': 'password',
-            'username': 'email',
-        }],
+var pcConfig = {
+    'iceServers': [{
+        'urls': 'stun:stun.l.google.com:19302'
+    }]
 };
 
-const caller = new RTCPeerConnection();
+// Set up audio and video regardless of what devices are present.
+var sdpConstraints = {
+    offerToReceiveAudio: true,
+    offerToReceiveVideo: true
+};
 
-navigator.mediaDevices.getUserMedia(constraints).then(mediaStream => {
-   // const video = document.querySelector('video');
-    //video.srcObject = mediaStream;
+/////////////////////////////////////////////
 
-    console.log(mediaStream);
-    console.log(caller);
+var room = 'foo';
+// Could prompt for room name:
+// room = prompt('Enter room name:');
 
-   // caller.addStream(mediaStream);
-}).catch(err => {
-    console.log(err.name + ': ' + err.message);
+var socket = io.connect();
+
+if (room !== '') {
+    socket.emit('create or join', room);
+    console.log('Attempted to create or  join room', room);
+}
+
+socket.on('created', function(room) {
+    console.log('Created room ' + room);
+    isInitiator = true;
 });
 
-caller.onaddstream = (evt) => {
-    console.log('onaddstream called');
-   // document.querySelector('#remoteVideo').srcObject = evt.stream;
-  //  console.log(document.querySelector('#remoteVideo').srcObject);
-    console.log(evt);
-};
+socket.on('full', function(room) {
+    console.log('Room ' + room + ' is full');
+});
 
+socket.on('join', function (room){
+    console.log('Another peer made a request to join room ' + room);
+    console.log('This peer is the initiator of room ' + room + '!');
+    isChannelReady = true;
+});
 
-//const callBtn = document.getElementById('callBtn');
+socket.on('joined', function(room) {
+    console.log('joined: ' + room);
+    isChannelReady = true;
+});
 
-/*
-callBtn.addEventListener('click', () => {
-    // console.log('click');
+socket.on('log', function(array) {
+    console.log.apply(console, array);
+});
 
-    caller.createOffer().then((val) => {
-        caller.setLocalDescription(new RTCSessionDescription(val));
+////////////////////////////////////////////////
 
-        const jsonval = JSON.stringify(val);
-        //console.log(jsonval);
-       // socket.emit('call', jsonval); //hello: jsonval});
+function sendMessage(message) {
+    console.log('Client sending message: ', message);
+    socket.emit('message', message);
+}
 
+// This client receives a message
+socket.on('message', function(message) {
+    console.log('Client received message:', message);
+    if (message === 'got user media') {
+        maybeStart();
+    } else if (message.type === 'offer') {
+        if (!isInitiator && !isStarted) {
+            maybeStart();
+        }
+        pc.setRemoteDescription(new RTCSessionDescription(message));
+        doAnswer();
+    } else if (message.type === 'answer' && isStarted) {
+        pc.setRemoteDescription(new RTCSessionDescription(message));
+    } else if (message.type === 'candidate' && isStarted) {
+        var candidate = new RTCIceCandidate({
+            sdpMLineIndex: message.label,
+            candidate: message.candidate
+        });
+        pc.addIceCandidate(candidate);
+    } else if (message === 'bye' && isStarted) {
+        handleRemoteHangup();
+    }
+});
 
-    }).catch((e)=>{
-        console.log('error ', e);
+////////////////////////////////////////////////////
+
+var localVideo = document.querySelector('#localVideo');
+var remoteVideo = document.querySelector('#remoteVideo');
+
+navigator.mediaDevices.getUserMedia({
+    audio: true,
+    video: true
+})
+    .then(gotStream)
+    .catch(function(e) {
+        alert('getUserMedia() error: ' + e.name);
     });
-});
-*/
-/*
-socket.on('call', (value)  => {
-    const v = new RTCSessionDescription(JSON.parse(value));
-    //console.log(v);
-    caller.setRemoteDescription(v);
-    socket.emit('answer',{ answer: 'call answered' });
-    //console.log(value);
-});
 
-socket.on('answer', (value)  => {
-    console.log(value);
-});
-*/
+function gotStream(stream) {
+    console.log('Adding local stream.');
+    localStream = stream;
+    localVideo.srcObject = stream;
+    sendMessage('got user media');
+    if (isInitiator) {
+        maybeStart();
+    }
+}
 
-
-
-caller.onicecandidate = evt => {
-    if (!evt.candidate) return;
-    console.log('onicecandidate called');
-    onIceCandidate(evt);
+var constraints = {
+    video: true
 };
 
-//Send the ICE Candidate to the remote peer
-const onIceCandidate = (evt) => {
-    socket.emit('candidate', JSON.stringify({'candidate': evt.candidate}));
+console.log('Getting user media with constraints', constraints);
+
+if (location.hostname !== 'localhost') {
+    requestTurn(
+        'https://computeengineondemand.appspot.com/turn?username=41784574&key=4080218913'
+    );
+}
+
+function maybeStart() {
+    console.log('>>>>>>> maybeStart() ', isStarted, localStream, isChannelReady);
+    if (!isStarted && typeof localStream !== 'undefined' && isChannelReady) {
+        console.log('>>>>>> creating peer connection');
+        createPeerConnection();
+        pc.addStream(localStream);
+        isStarted = true;
+        console.log('isInitiator', isInitiator);
+        if (isInitiator) {
+            doCall();
+        }
+    }
+}
+
+window.onbeforeunload = function() {
+    sendMessage('bye');
 };
 
-socket.on('candidate', (value) => {
-    console.log(value);
-    caller.addIceCandidate(new RTCIceCandidate(JSON.parse(value).candidate));
-});
+/////////////////////////////////////////////////////////
 
+function createPeerConnection() {
+    try {
+        pc = new RTCPeerConnection(null);
+        pc.onicecandidate = handleIceCandidate;
+        pc.onaddstream = handleRemoteStreamAdded;
+        pc.onremovestream = handleRemoteStreamRemoved;
+        console.log('Created RTCPeerConnnection');
+    } catch (e) {
+        console.log('Failed to create PeerConnection, exception: ' + e.message);
+        alert('Cannot create RTCPeerConnection object.');
+        return;
+    }
+}
+
+function handleIceCandidate(event) {
+    console.log('icecandidate event: ', event);
+    if (event.candidate) {
+        sendMessage({
+            type: 'candidate',
+            label: event.candidate.sdpMLineIndex,
+            id: event.candidate.sdpMid,
+            candidate: event.candidate.candidate
+        });
+    } else {
+        console.log('End of candidates.');
+    }
+}
+
+function handleCreateOfferError(event) {
+    console.log('createOffer() error: ', event);
+}
+
+function doCall() {
+    console.log('Sending offer to peer');
+    pc.createOffer(setLocalAndSendMessage, handleCreateOfferError);
+}
+
+function doAnswer() {
+    console.log('Sending answer to peer.');
+    pc.createAnswer().then(
+        setLocalAndSendMessage,
+        onCreateSessionDescriptionError
+    );
+}
+
+function setLocalAndSendMessage(sessionDescription) {
+    pc.setLocalDescription(sessionDescription);
+    console.log('setLocalAndSendMessage sending message', sessionDescription);
+    sendMessage(sessionDescription);
+}
+
+function onCreateSessionDescriptionError(error) {
+    trace('Failed to create session description: ' + error.toString());
+}
+
+function requestTurn(turnURL) {
+    var turnExists = false;
+    for (var i in pcConfig.iceServers) {
+        if (pcConfig.iceServers[i].urls.substr(0, 5) === 'turn:') {
+            turnExists = true;
+            turnReady = true;
+            break;
+        }
+    }
+    if (!turnExists) {
+        console.log('Getting TURN server from ', turnURL);
+        // No TURN server. Get one from computeengineondemand.appspot.com:
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var turnServer = JSON.parse(xhr.responseText);
+                console.log('Got TURN server: ', turnServer);
+                pcConfig.iceServers.push({
+                    'urls': 'turn:' + turnServer.username + '@' + turnServer.turn,
+                    'credential': turnServer.password
+                });
+                turnReady = true;
+            }
+        };
+        xhr.open('GET', turnURL, true);
+        xhr.send();
+    }
+}
+
+function handleRemoteStreamAdded(event) {
+    const addedVideo = '<div class="cell test align-self-stretch"><video id="remoteVideo" autoplay playsinline></video></div>';
+
+    $('#callers').append(addedVideo);
+    remoteVideo = document.querySelector('#remoteVideo');
+    console.log('Remote stream added. append');
+    remoteStream = event.stream;
+    remoteVideo.srcObject = remoteStream;
+    arrangeGrid();
+}
+
+function handleRemoteStreamRemoved(event) {
+    console.log('Remote stream removed. Event: ', event);
+}
+
+function hangup() {
+    console.log('Hanging up.');
+    stop();
+    sendMessage('bye');
+}
+
+function handleRemoteHangup() {
+    console.log('Session terminated.');
+    stop();
+    isInitiator = false;
+}
+
+function stop() {
+    isStarted = false;
+    pc.close();
+    pc = null;
+}
+
+/**
+ SANNAN ALUE
+
+ */
 
 const chatSend = document.getElementById('chatSend');
 const chatMessages = document.getElementById('chatMessages');
 const chatText = document.getElementById('chatText');
 const chatForm = document.getElementById('chatForm');
 const chatbox = document.getElementById("chatbox");
-
 let sent = false;
 
 
 /**
- * colours used in chat member names
- * @type {string[]}
- */
-const colourArray = ['rgb(0,176,240)','rgb(255,63,168)', 'rgb(254,221,26)', 'rgb(134,53,243)', 'rgb(14,226,216)', 'rgb(134,102,88)',
-    'rgb(75,200,46)', 'rgb(240,166,0)', 'rgb(128,128,128)', 'rgb(52,90,254)', 'rgb(217,23,23)', 'rgb(219,154,230)', 'rgb(200,234,30)',
-    'rgb(0,176,117)', 'rgb(229,109,109)', 'rgb(71,117,37)'];
-
-
-/**
- * names used in chat member names
- * @type {string[]}
- */
-const nameArray = ['car', 'face wash', 'air freshener', 'blouse', 'purse', 'rug', 'shoes', 'headphones', 'wallet', 'tweezers',
-    'charger', 'glasses', 'eraser', 'beef', 'house', 'lace', 'cinder block', 'sticky note', 'couch', 'clay pot', 'grid paper',
-    'water bottle', 'keyboard', 'thermometer', 'conditioner', 'table', 'fridge', 'toothbrush', 'knife', 'fork', 'camera',
-    'glow stick', 'keys', 'drill press', 'credit card', 'playing card', 'shovel', 'milk', 'bow', 'hair brush', 'ring', 'soap', 'nail file',
-    'tree', 'tv', 'video games', 'zipper', 'toilet', 'bookmark', 'shawl'];
-
-let usedArray = [];
-let usedArray2 = [];
-
-/**
- * Get a random item from list
- * @returns {number}
- */
-const getRandom = (amount, array, used) => {
-    let ran = Math.floor(Math.random() * amount);
-
-    if(used.length === array.length) {
-        used = [];
-    }
-
-    if(used.includes(ran)) {
-        return getRandom(amount, array, used);
-    } else {
-        used[used.length] =  ran;
-        return ran;
-    }
-};
-
-/**
- * Get random colour from list that doesn't exist yet. If all colours are used, use all colours again.
- * @returns {string}
- */
-const getName = (amount, array, used) => {
-    const ran = getRandom(amount, array, used);
-    const col = array[ran];
-
-    if(!col) {
-        console.log('er');
-    }
-    return col;
-};
-
-/**
- *
- * @param string
- * @returns {string}
- */
-const capitalizeFirstLetter = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-};
-
-
-const user = capitalizeFirstLetter(getName(50, nameArray, usedArray2));
-const color = getName(16, colourArray, usedArray);
-
-/**
  * add list item in chatbox
  * @param typed
+ * @param user
+ * @param color
  */
-const addChat = (typed) => {
+const addChat = (typed, user, color) => {
     const li = document.createElement('li');
     const p = document.createElement('p');
     const typer = user + ': ';
@@ -188,9 +298,6 @@ const addChat = (typed) => {
 
     chatText.value = '';
 };
-
-
-
 
 /**
  * Scroll chat to bottom if user sends chat or user is at the bottom of chat
@@ -221,20 +328,21 @@ chatForm.addEventListener('submit', (e) => {
     if(chatText.value !== '') {
         sent = true;
         //addChat(chatText.value);
+
         socket.emit('chatSend', chatText.value); //JSON parse?
+       // console.log('chat sent ', chatText.value);
     }
 });
 
-
 socket.on('chatReceive',(chat) => {
-    addChat(chat); // JSON parse ??
+   // console.log('chat received ', chat.chat, chat.user, chat.color);
+    addChat(chat.chat, chat.user, chat.color); // JSON parse ??
 });
 
 const users = document.getElementById('userCounter');
-let usersCount = 1;
+// let usersCount = 1;
 
-socket.on('userAdd', () => {
-    usersCount += 1;
-
+socket.on('userAdd', (usersCount) => {
+  //  usersCount += 1;
     users.innerHTML = 'People: ' + usersCount.toString();
 });

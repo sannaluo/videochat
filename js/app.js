@@ -1,10 +1,9 @@
-$(document).foundation();
-
+$(document).foundation()
+// const remoteVideo = document.getElementById('remoteVideo');
 
 const callersContainer = document.querySelector('#callers');
 const addCallerBtn = document.querySelector('#addVideo');
 
-let gridSettings = 1;
 
 
 const arrangeGrid = () => {
@@ -12,7 +11,7 @@ const arrangeGrid = () => {
     console.log(document.querySelectorAll('#callers .cell'));
 
 
-    if (gridSettings < 3) {
+    if (document.querySelectorAll('#callers .cell').length < 3) {
         callersContainer.className = 'grid-x grid-padding-x grid-padding-y small-up-1 align-center-middle fullHeight';
 
         for (let i of document.querySelectorAll('#callers .cell')) {
@@ -20,7 +19,7 @@ const arrangeGrid = () => {
         }
 
 
-    } else if (gridSettings < 5) {
+    } else if (document.querySelectorAll('#callers .cell').length < 5) {
         callersContainer.className = 'grid-x grid-padding-x grid-padding-y small-up-2 align-center-middle fullHeight';
 
         for (let i of document.querySelectorAll('#callers .cell')) {
@@ -28,7 +27,7 @@ const arrangeGrid = () => {
         }
 
 
-    } else if (gridSettings < 9) {
+    } else if (document.querySelectorAll('#callers .cell').length < 9) {
         callersContainer.className = 'grid-x grid-padding-x grid-padding-y small-up-4 align-center-middle fullHeight';
 
         for (let i of document.querySelectorAll('#callers .cell')) {
@@ -36,7 +35,7 @@ const arrangeGrid = () => {
         }
 
 
-    } else if (gridSettings < 13) {
+    } else if (document.querySelectorAll('#callers .cell').length < 13) {
         callersContainer.className = 'grid-x grid-padding-x grid-padding-y small-up-4 align-center-middle fullHeight';
 
 
@@ -54,32 +53,12 @@ const arrangeGrid = () => {
 
 };
 
-$(addCallerBtn).click(function () {
-    console.log('asd');
-
-
-    gridSettings += 1;
-
-    console.log(gridSettings);
-
-
-    const addedVideo = '<div class="cell test align-self-stretch"><video loop autoplay src="media/vid/3CyobnaL6Y3zkh9W9QCuCBU84xmPGGVwN9D9Xzq2smg.mp4"></video></div>';
-
-    $('#addVideoContainer').before(addedVideo);
-
-
-    arrangeGrid(gridSettings);
-
-
-});
-
-
-
-
+arrangeGrid();
 
 
 /* Sannan alue! */
 
+/*
 const chatSend = document.getElementById('chatSend');
 const chatMessages = document.getElementById('chatMessages');
 const chatText = document.getElementById('chatText');
@@ -92,15 +71,17 @@ let sent = false;
  * colours used in chat member names
  * @type {string[]}
  */
+/*
 const colourArray = ['rgb(0,176,240)','rgb(255,63,168)', 'rgb(254,221,26)', 'rgb(134,53,243)', 'rgb(14,226,216)', 'rgb(134,102,88)',
     'rgb(75,200,46)', 'rgb(240,166,0)', 'rgb(128,128,128)', 'rgb(52,90,254)', 'rgb(217,23,23)', 'rgb(219,154,230)', 'rgb(200,234,30)',
     'rgb(0,176,117)', 'rgb(229,109,109)', 'rgb(71,117,37)'];
 
-
+*/
 /**
  * names used in chat member names
  * @type {string[]}
  */
+/*
 const nameArray = ['car', 'face wash', 'air freshener', 'blouse', 'purse', 'rug', 'shoes', 'headphones', 'wallet', 'tweezers',
     'charger', 'glasses', 'eraser', 'beef', 'house', 'lace', 'cinder block', 'sticky note', 'couch', 'clay pot', 'grid paper',
     'water bottle', 'keyboard', 'thermometer', 'conditioner', 'table', 'fridge', 'toothbrush', 'knife', 'fork', 'camera',
@@ -109,11 +90,13 @@ const nameArray = ['car', 'face wash', 'air freshener', 'blouse', 'purse', 'rug'
 
 let usedArray = [];
 let usedArray2 = [];
+*/
 
 /**
  * Get a random item from list
  * @returns {number}
  */
+/*
 const getRandom = (amount, array, used) => {
     let ran = Math.floor(Math.random() * amount);
 
@@ -128,11 +111,13 @@ const getRandom = (amount, array, used) => {
         return ran;
     }
 };
+*/
 
 /**
  * Get random colour from list that doesn't exist yet. If all colours are used, use all colours again.
  * @returns {string}
  */
+/*
 const getName = (amount, array, used) => {
     const ran = getRandom(amount, array, used);
     const col = array[ran];
@@ -142,15 +127,18 @@ const getName = (amount, array, used) => {
     }
     return col;
 };
+*/
 
 /**
  *
  * @param string
  * @returns {string}
  */
+/*
 const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
 };
+*/
 
 /**
  * Test for colours and names
@@ -171,15 +159,17 @@ window.onload = () => {
         chatMessages.appendChild(li);
     }
 };
-*/
+
 
 const user = capitalizeFirstLetter(getName(50, nameArray, usedArray2));
 const color = getName(16, colourArray, usedArray);
+*/
 
 /**
  * add list item in chatbox
  * @param typed
  */
+/*
 const addChat = (typed) => {
     const li = document.createElement('li');
     const p = document.createElement('p');
@@ -213,10 +203,12 @@ chatForm.addEventListener('submit', (e) => {
         addChat(chatText.value);
     }
 });
+*/
 
 /**
  * Scroll chat to bottom if user sends chat or user is at the bottom of chat
  */
+/*
 setInterval(function() {
     // allow 1px inaccuracy by adding 1
     const isScrolledToBottom = chatbox.scrollHeight - chatbox.clientHeight <= chatbox.scrollTop + 1;
@@ -227,3 +219,5 @@ setInterval(function() {
         sent = false;
     }
 }, 500);
+
+*/
