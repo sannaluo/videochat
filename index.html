@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Best Chatroom</title>
+    <title>Cranberry</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
     <link href="https://fonts.googleapis.com/css?family=Charmonman|Roboto+Condensed" rel="stylesheet">
@@ -15,36 +16,29 @@
         <div id="header" class="cell">
             <div class="grid-x grid-padding-y grid-padding-x">
                 <div class="cell small-10">
-                    <h1>🐶 Dogroom</h1>
+                    <img id="logo" src="media/videochatlogo.png">
                 </div>
                 <div class="cell small-2 align-self-bottom">
-                    <h4 id="userCounter">People: 1</h4>
+                    <h5 id="userCounter"><img id="personicon" src="media/personicon.png">1</h5>
                 </div>
             </div>
         </div>
         <div id="main" class="cell auto">
             <div class="grid-x grid-padding-x grid-padding-y fullHeight">
                 <div id="videoContainer" class="cell small-9">
-                    <div class="grid-y fullHeight">
-                        <div class="cell align-self-bottom">
-                            <button id="hangupBtn">⤫</button>
-                        </div>
-                        <div class="cell align-self-stretch small-11">
-                            <div id="callers" class="grid-x grid-padding-x grid-padding-y small-up-1 align-center-middle fullHeight">
-                                <div id="addVideoContainer" class="cell test align-self-stretch">
-                                    <div id="addVideo"><h1>+</h1></div>
-                                </div>
-                            </div>
+                    <div id="callers" class="grid-x grid-padding-x grid-padding-y small-up-1 align-center-middle fullHeight">
+                        <div id="addVideoContainer" class="cell test align-self-stretch">
+                            <div id="addVideo"><h1>+</h1></div>
                         </div>
                     </div>
                 </div>
                 <div id="chatroomContainer" class="cell align-self-stretch small-3">
                     <div class="grid-y grid-frame grid-padding-x grid-padding-y grid-margin-x grid-margin-y fullHeight">
-                        <div id="chatbox" class="cell align-self-stretch small-10">
+                        <div id="chatbox" class="cell align-self-stretch auto">
                             <ul id="chatMessages">
                             </ul>
                         </div>
-                        <div id="chatType" class="cell align-self-stretch small-2">
+                        <div id="chatType" class="cell align-self-stretch">
                             <div class="grid-x">
                                 <div class="cell small-10">
                                     <form id="chatForm">

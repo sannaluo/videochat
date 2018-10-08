@@ -19,14 +19,13 @@ vaalea harmaa
 #F2F2F2
 rgb(242,242,242)
 */
+
 html {
     font-family: 'Roboto Condensed', sans-serif;
-
 }
 
 #header {
     background-color: #8C003C;
-
     color: #FCFBF7;
 
     -webkit-box-shadow: 0px 2px 31px -1px rgba(0,0,0,0.75);
@@ -34,53 +33,38 @@ html {
     box-shadow: 0px 2px 31px -1px rgba(0,0,0,0.75);
 
     border-bottom: 3px solid rgb(110, 0, 55);
-
     z-index: 999;
+}
 
-
+#logo {
+    width: 15rem;
 }
 
 #main {
     background-color: #FCFBF7;
-
-
-
 }
 
 .fullHeight {
     height: calc(100% + 2rem) !important;
-
-
 }
 
 #chatroomContainer {
     background-color: #f2f2f2;
-
 
     -webkit-box-shadow: inset 8px 0px 42px -21px rgba(0,0,0,0.75);
     -moz-box-shadow: inset 8px 0px 42px -21px rgba(0,0,0,0.75);
     box-shadow: inset 8px 0px 42px -21px rgba(0,0,0,0.75);
 }
 
-
-
 .videoGridY {
     height: calc(100% + 30px);
-
 }
 
-
 .test {
-    /*background: dodgerblue;*/
-//background: lightblue;
-
-
     max-width: 100%;
-    color: #cc4b37;
+    color: #8C003C;
 
     animation: fade-in 0.3s ease;
-
-
 }
 
 #addVideo {
@@ -90,27 +74,20 @@ html {
     left: 50%;
     transform: translate(-50%, -50%);
 
-    border: 3px dashed #cc4b37;
-
+    border: 3px dashed #8C003C;
 
     height: 11rem;
     width: 11rem;
 
-
     transition-duration: 0.3s;
-
     cursor: pointer;
 }
 
-
 #addVideo:hover {
     background-color: #f2f2f2;
-
-
 }
 
 #addVideo h1 {
-
     position: relative;
     float: left;
     top: 50%;
@@ -118,46 +95,36 @@ html {
     transform: translate(-50%, -50%);
 
     font-size: 500%;
+    color: #8C003C;
 }
 
-
 .test video {
-
-
-    height: 65%;
-
-
+    height: 85%;
+    background-color: #00B0F0;
 
     position: relative;
     float: left;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-
     transition-duration: 0.5s;
 
-
-
-    -webkit-box-shadow: 10px 10px 45px -15px rgba(84,84,84,1);
-    -moz-box-shadow: 10px 10px 45px -15px rgba(84,84,84,1);
-    box-shadow: 10px 10px 45px -15px rgba(84,84,84,1);
+    -webkit-box-shadow: 5px 5px 17px -5px rgba(0,0,0,0.5);
+    -moz-box-shadow: 5px 5px 17px -5px rgba(0,0,0,0.5);
+    box-shadow: 5px 5px 17px -5px rgba(0,0,0,0.5);
 }
-
-
 
 @keyframes fade-in {
     0% {
         opacity: 0;
-        transform: scale(0) rotatey(180deg);
+        transform: scale(0);
 
     }
     100% {
         opacity: 1;
-        transform: scale(1) rotateY(0deg);
+        transform: scale(1);
     }
 }
-
-
 
 .me {
     border: 4px solid #00B0F0;
@@ -166,19 +133,14 @@ html {
     box-shadow: 10px 10px 45px -15px #00B0F0;
 }
 
-
-/* SANNAN ALUE! */
-
-
-
 #chatbox {
     overflow: auto;
 }
 
 #chatType {
     background-color: #FCFBF7;
-
     border: 1px solid rgba(2, 2, 10, 0.2); /* #02020A 20% */
+    height: 4rem;
 
     -webkit-box-shadow: 10px 10px 45px -15px rgba(84,84,84,1);
     -moz-box-shadow: 10px 10px 45px -15px rgba(84,84,84,1);
@@ -202,7 +164,6 @@ html {
 
 ul {
     margin: 0;
-
 }
 
 li {
@@ -223,4 +184,10 @@ li p {
     color: #FCFBF7;
     width: 2rem;
     height: 2rem;
+}
+
+#personicon {
+    height: 1.5rem;
+    width: 1.5rem;
+    margin-right: 0.5rem;
 }

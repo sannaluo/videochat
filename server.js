@@ -6,6 +6,7 @@ var http = require('http');
 var socketIO = require('socket.io');
 
 var fileServer = new(nodeStatic.Server)();
+
 var app = http.createServer(function(req, res) {
     fileServer.serve(req, res);
 }).listen(8080);
@@ -21,7 +22,6 @@ let users = {};
 const colourArray = ['rgb(0,176,240)','rgb(255,63,168)', 'rgb(254,221,26)', 'rgb(134,53,243)', 'rgb(14,226,216)', 'rgb(134,102,88)',
     'rgb(75,200,46)', 'rgb(240,166,0)', 'rgb(128,128,128)', 'rgb(52,90,254)', 'rgb(217,23,23)', 'rgb(219,154,230)', 'rgb(200,234,30)',
     'rgb(0,176,117)', 'rgb(229,109,109)', 'rgb(71,117,37)'];
-
 
 /**
  * names used in chat member names
@@ -78,11 +78,8 @@ const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-
-
 var io = socketIO.listen(app);
 io.sockets.on('connection', function(socket) {
-
     // convenience function to log server messages on the client
     function log() {
         var array = ['Message from server:'];
@@ -112,7 +109,6 @@ io.sockets.on('connection', function(socket) {
             socket.join(room);
             log('Client ID ' + socket.id + ' created room ' + room);
             socket.emit('created', room, socket.id);
-
         } else{
             log('Client ID ' + socket.id + ' joined room ' + room);
             io.sockets.in(room).emit('join', room);
@@ -134,12 +130,12 @@ io.sockets.on('connection', function(socket) {
             const user = capitalizeFirstLetter(getName(50, nameArray, usedArray2));
             const color = getName(16, colourArray, usedArray);
             users[id] = {name: user, color:color};
-          //  console.log(users);
         }
     });
 
     socket.on('ipaddr', function() {
         var ifaces = os.networkInterfaces();
+
         for (var dev in ifaces) {
             ifaces[dev].forEach(function(details) {
                 if (details.family === 'IPv4' && details.address !== '127.0.0.1') {

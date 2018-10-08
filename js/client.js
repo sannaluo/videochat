@@ -20,8 +20,6 @@ var sdpConstraints = {
     offerToReceiveVideo: true
 };
 
-/////////////////////////////////////////////
-
 var room = 'foo';
 // Could prompt for room name:
 // room = prompt('Enter room name:');
@@ -57,8 +55,6 @@ socket.on('log', function(array) {
     console.log.apply(console, array);
 });
 
-////////////////////////////////////////////////
-
 function sendMessage(message) {
     console.log('Client sending message: ', message);
     socket.emit('message', message);
@@ -88,30 +84,22 @@ socket.on('message', function(message) {
     }
 });
 
-////////////////////////////////////////////////////
-
 var localVideo = document.querySelector('#localVideo');
 var remoteVideo = document.querySelector('#remoteVideo');
 
 $('#addVideo').click( function () {
-
     const addedVideo = '<div class="cell test align-self-stretch"><video id="localVideo" class="me" autoplay playsinline></video></div>';
 
     $('#addVideoContainer').before(addedVideo).remove();
-
     localVideo = document.querySelector('#localVideo');
 
     navigator.mediaDevices.getUserMedia({
         audio: true,
         video: true
-    })
-        .then(gotStream)
-        .catch(function(e) {
+    }).then(gotStream).catch(function(e) {
             alert('getUserMedia() error: ' + e.name);
         });
-
     arrangeGrid();
-
 });
 
 function gotStream(stream) {
@@ -153,8 +141,6 @@ function maybeStart() {
 window.onbeforeunload = function() {
     sendMessage('bye');
 };
-
-/////////////////////////////////////////////////////////
 
 function createPeerConnection() {
     try {
@@ -222,7 +208,6 @@ function requestTurn(turnURL) {
     }
     if (!turnExists) {
         console.log('Getting TURN server from ', turnURL);
-        // No TURN server. Get one from computeengineondemand.appspot.com:
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
@@ -242,7 +227,6 @@ function requestTurn(turnURL) {
 
 function handleRemoteStreamAdded(event) {
     const addedVideo = '<div class="cell test align-self-stretch"><video id="remoteVideo" autoplay playsinline></video></div>';
-
     $('#callers').append(addedVideo);
     remoteVideo = document.querySelector('#remoteVideo');
     console.log('Remote stream added. append');
@@ -273,18 +257,12 @@ function stop() {
     pc = null;
 }
 
-/**
- SANNAN ALUE
-
- */
-
 const chatSend = document.getElementById('chatSend');
 const chatMessages = document.getElementById('chatMessages');
 const chatText = document.getElementById('chatText');
 const chatForm = document.getElementById('chatForm');
 const chatbox = document.getElementById("chatbox");
 let sent = false;
-
 
 /**
  * add list item in chatbox
@@ -318,22 +296,16 @@ setInterval(function() {
     // allow 1px inaccuracy by adding 1
     const isScrolledToBottom = chatbox.scrollHeight - chatbox.clientHeight <= chatbox.scrollTop + 60;
 
-    // scroll to bottom if isScrolledToBottom is true
     if (isScrolledToBottom || sent) {
         chatbox.scrollTop = chatbox.scrollHeight - chatbox.clientHeight;
         sent = false;
     }
- //   console.log(sent);
-  //  console.log(isScrolledToBottom);
 }, 500);
-
-
 
 chatSend.addEventListener('click', () => {
     if(chatText.value !== '') {
         sent = true;
-        //addChat(chatText.value);
-        socket.emit('chatSend', chatText.value); //JSON parse?
+        socket.emit('chatSend', chatText.value);
     }
 });
 
@@ -341,22 +313,16 @@ chatForm.addEventListener('submit', (e) => {
     e.preventDefault();
     if(chatText.value !== '') {
         sent = true;
-        //addChat(chatText.value);
-
-        socket.emit('chatSend', chatText.value); //JSON parse?
-       // console.log('chat sent ', chatText.value);
+        socket.emit('chatSend', chatText.value);
     }
 });
 
 socket.on('chatReceive',(chat) => {
-   // console.log('chat received ', chat.chat, chat.user, chat.color);
-    addChat(chat.chat, chat.user, chat.color); // JSON parse ??
+    addChat(chat.chat, chat.user, chat.color);
 });
 
 const users = document.getElementById('userCounter');
-// let usersCount = 1;
 
 socket.on('userAdd', (usersCount) => {
-  //  usersCount += 1;
-    users.innerHTML = 'People: ' + usersCount.toString();
+    users.innerHTML = '<img id="personicon" src="media/personicon.png">' + usersCount.toString();
 });
